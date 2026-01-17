@@ -1,12 +1,11 @@
-var crypto = require('crypto');
-var co = require('co');
+const crypto = require('crypto').promises;
 
-function spawnTokenBuf() {
-    return function(callback) {
-        crypto.randomBytes(64, callback);
-    };
+async function generateToken() {
+    const buf = await crypto.randomBytes(64);
+    return buf.toString('base64');
 }
 
-co(function* () {
-    console.log((yield spawnTokenBuf()).toString('base64'));
-});
+(async () => {
+    const token = await generateToken();
+    console.log(token);
+})();
