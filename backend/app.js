@@ -1,20 +1,39 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-
-var app = express();
-
-app.use(logger('dev'));
+const jwt = require('jsonwebtoken');
+const express = require('express');
+const app = express();
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+function authenticateToken(req, res, next) {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+  
+    console.log("token = "+token);
+    if (token == null) return res.sendStatus(401)
+  
+    jwt.verify(token, process.env.MY_TOKEN, (err, user) => {
+      console.log(err)
+  
+      if (err) return res.sendStatus(403)
+  
+      req.user = user
+  
+      next()
+    })
+  }
 
-module.exports = app;
+  // Routes
+const customerRoutes = require('./routes/customers');
+const accountRoutes = require('./routes/accounts');
+const cardRoutes = require('./routes/cards');
+const cardAccountRoutes = require('./routes/card_accounts');
+const accessRightsRoutes = require('./routes/access_rights');
+const logsRoutes = require('./routes/logs');
+
+app.use('/customers', customerRoutes);
+app.use('/accounts', accountRoutes);
+app.use('/cards', cardRoutes);
+app.use('/card_accounts', cardAccountRoutes);
+app.use('/access_rights', accessRightsRoutes);
+app.use('/logs', logsRoutes);
+
+app.listen(3000, () => console.log('Server running on http://localhost:3000'));
