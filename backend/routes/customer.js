@@ -17,7 +17,7 @@ router.get('/',
 //GET one customer by id
 router.get('/:customer_id',
  function(request, response) {
-    user.getOne(request.params.uname, function(err, dbResult) {
+    user.getOne(request.params.customer_id, function(err, dbResult) {
       if (err) {
         response.json(err);
       } else {
@@ -41,7 +41,7 @@ function(request, response) {
 //DELETE deletes customer by id
 router.delete('/:customer_id', 
 function(request, response) {
-  user.delete(request.params.uname, function(err, dbResult) {
+  user.delete(request.params.customer_id, function(err, dbResult) {
     if (err) {
       response.json(err);
     } else {
@@ -53,7 +53,7 @@ function(request, response) {
 // PUT updates customer with id. new info from request body
 router.put('/:customer_id', 
 function(request, response) {
-  user.update(request.params.uname, request.body, function(err, dbResult) {
+  user.update(request.params.customer_id, request.body, function(err, dbResult) {
     if (err) {
       response.json(err);
     } else {
