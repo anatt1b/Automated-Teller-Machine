@@ -1,4 +1,4 @@
-const db = require('../database');
+const db = require('../db');
 
 //List all access rights
 const accessRights = {
