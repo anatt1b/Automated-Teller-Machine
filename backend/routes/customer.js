@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const user = require('../models/customer');
+const customer = require('../models/customer');
 
 // GET all customers
 router.get('/',
  function(request, response) {
-    user.getAll(function(err, dbResult) {
+    customer.getAll(function(err, dbResult) {
       if (err) {
         response.json(err);
       } else {
@@ -17,7 +17,7 @@ router.get('/',
 //GET one customer by id
 router.get('/:customer_id',
  function(request, response) {
-    user.getOne(request.params.customer_id, function(err, dbResult) {
+    customer.getOne(request.params.customer_id, function(err, dbResult) {
       if (err) {
         response.json(err);
       } else {
@@ -29,7 +29,7 @@ router.get('/:customer_id',
 // POST add new customer
 router.post('/', 
 function(request, response) {
-  user.add(request.body, function(err, dbResult) {
+  customer.add(request.body, function(err, dbResult) {
     if (err) {
       response.json(err);
     } else {
@@ -41,7 +41,7 @@ function(request, response) {
 //DELETE deletes customer by id
 router.delete('/:customer_id', 
 function(request, response) {
-  user.delete(request.params.customer_id, function(err, dbResult) {
+  customer.delete(request.params.customer_id, function(err, dbResult) {
     if (err) {
       response.json(err);
     } else {
@@ -53,7 +53,7 @@ function(request, response) {
 // PUT updates customer with id. new info from request body
 router.put('/:customer_id', 
 function(request, response) {
-  user.update(request.params.customer_id, request.body, function(err, dbResult) {
+  customer.update(request.params.customer_id, request.body, function(err, dbResult) {
     if (err) {
       response.json(err);
     } else {
