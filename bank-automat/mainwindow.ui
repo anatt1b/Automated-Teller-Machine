@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>789</width>
+    <height>537</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,6 +17,9 @@
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
       <widget class="QWidget" name="pageLogin">
        <widget class="QPushButton" name="btnLogin">
         <property name="geometry">
@@ -34,14 +37,43 @@
        <widget class="QLineEdit" name="pinInput">
         <property name="geometry">
          <rect>
-          <x>320</x>
+          <x>290</x>
           <y>210</y>
-          <width>113</width>
+          <width>161</width>
           <height>24</height>
          </rect>
         </property>
         <property name="echoMode">
          <enum>QLineEdit::EchoMode::Password</enum>
+        </property>
+        <property name="placeholderText">
+         <string>Password</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="cardInput">
+        <property name="geometry">
+         <rect>
+          <x>290</x>
+          <y>170</y>
+          <width>161</width>
+          <height>24</height>
+         </rect>
+        </property>
+        <property name="placeholderText">
+         <string>Korttinumero</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnDevLogin">
+        <property name="geometry">
+         <rect>
+          <x>330</x>
+          <y>290</y>
+          <width>80</width>
+          <height>24</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>DevLogin</string>
         </property>
        </widget>
       </widget>
@@ -233,7 +265,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>789</width>
      <height>21</height>
     </rect>
    </property>
