@@ -15,7 +15,7 @@ router.get('/',
   });
 
 // GET by customer
-router.get('/:customer_customer_id',
+router.get('/customer/:customer_customer_id',
  function(request, response) {
     accessRights.getByCustomer(request.params.customer_customer_id, function(err, dbResult) {
       if (err) {
@@ -27,7 +27,7 @@ router.get('/:customer_customer_id',
 });
 
 // GET by account
-router.get('/:account_account_id',
+router.get('/account/:account_account_id',
  function(request, response) {
     accessRights.getByAccount(request.params.account_account_id, function(err, dbResult) {
       if (err) {
@@ -77,7 +77,7 @@ function(request, response) {
 // PUT updates access right by both customer and account ids
 router.put('/:customer_customer_id/:account_account_id', 
 function(request, response) {
-  accessRights.update(request.params.customer_customer_id, request.params.account_account_id, request.body, function(err, dbResult) {
+  accessRights.update(request.params.customer_customer_id, request.params.account_account_id, request.body.access, function(err, dbResult) {
     if (err) {
       response.json(err);
     } else {
