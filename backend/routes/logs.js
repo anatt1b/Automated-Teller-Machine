@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const express = require('express');
 const router = express.Router();
 const logs = require('../models/logs');
@@ -66,3 +67,6 @@ function(request, response) {
 });
 
 module.exports = router;
+=======
+
+>>>>>>> 1dabb38c1c0a38c6a60b07d537d9ad868df19fbb
