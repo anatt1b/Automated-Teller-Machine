@@ -18,7 +18,7 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>7</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="pageLogin">
        <widget class="QPushButton" name="btnLogin">
@@ -146,6 +146,8 @@
         </property>
        </widget>
       </widget>
+      <widget class="QWidget" name="CreditBalance"/>
+      <widget class="QWidget" name="CreditWithdraw"/>
       <widget class="QWidget" name="pageWithdraw">
        <widget class="QPushButton" name="btnBackWithdrawn">
         <property name="geometry">

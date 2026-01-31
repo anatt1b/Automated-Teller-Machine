@@ -1,4 +1,4 @@
-const db = require('../database/dbconnection');
+const db = require('../db');
 
 const logs = {
 

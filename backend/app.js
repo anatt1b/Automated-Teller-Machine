@@ -22,19 +22,21 @@ function authenticateToken(req, res, next) {
   }
 
   // Routes
+const loginRoutes = require('./routes/Login');
 const customerRoutes = require('./routes/customer');
 const accountRoutes = require('./routes/account');
 const cardRoutes = require('./routes/card');
 const cardAccountRoutes = require('./routes/card_account');
-//const accessRightsRoutes = require('./routes/access_rights');
-//const logsRoutes = require('./routes/logs');
+const accessRightsRoutes = require('./routes/access_rights');
+const logsRoutes = require('./routes/logs');
 
+app.use('/login', loginRoutes);
 app.use('/customer', customerRoutes);
 app.use('/account', accountRoutes);
 app.use('/card', cardRoutes);
 app.use('/card_account', cardAccountRoutes);
-//app.use('/access_right', accessRightsRoutes);
-//app.use('/logs', logsRoutes);
+app.use('/access_right', accessRightsRoutes);
+app.use('/logs', logsRoutes);
 
 app.get('/health', (req, res) => res.json({ ok: true}));
 
