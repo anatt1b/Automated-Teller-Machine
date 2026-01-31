@@ -31,8 +31,7 @@ private:
     // Card information from login
     QString cardNumber;
     QString accountHolder;
-    bool hasCreditFeature;
-    bool hasBoth;
+    QString cardType;
     QString webToken; // JWT
 
 

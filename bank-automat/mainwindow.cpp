@@ -58,6 +58,14 @@ MainWindow::MainWindow(QWidget *parent)
         ui->stackedWidget->setCurrentWidget(ui->pageMenu);
     });
 
+    connect(ui->btnCreditBalance, &QPushButton::clicked, this, [this]() {
+        ui->stackedWidget->setCurrentWidget(ui->CreditBalance);
+    });
+
+    connect(ui->btnCreditWithdrawn, &QPushButton::clicked, this, [this]() {
+        ui->stackedWidget->setCurrentWidget(ui->CreditWithdraw);
+    });
+
     connect(ui->btnLogout, &QPushButton::clicked, this, [this]() {
         webToken.clear();
         ui->cardInput->clear();
@@ -107,64 +115,95 @@ void MainWindow::getLoginSlot()
 
     if (webToken.isEmpty()) {
         qDebug() << "Login failed:" << obj.value("message").toString();
+        QMessageBox::critical(this, "Login Failed", obj.value("message").toString());
         reply->deleteLater();
         reply = nullptr;
         return;
     }
+
     // Get card information from response
     cardNumber = obj.value("cardnumber").toString();
-    hasCreditFeature = obj.value("has_credit").toBool(true); // default true if not provided
+    accountHolder = obj.value("account_holder").toString("ACCOUNT HOLDER");
 
-    // Set card info on the card selection page
-    QString maskedNumber = "•••• •••• •••• " + cardNumber.right(4);
-    ui->cardInput->setText(maskedNumber);
+    // Get card type: "debit", "credit", or "combo"
+    cardType = obj.value("card_type").toString("combo").toLower();
 
+    qDebug() << "Card Type:" << cardType;
 
-    // Enable/disable credit button based on card feature
-    ui->credit->setEnabled(hasCreditFeature);
-    if (!hasCreditFeature) {
-        ui->credit->setText("CREDIT\n(Not Available)");
+    // Route based on card type
+    if (cardType == "debit") {
+        // Debit only card - go directly to menu with DEBIT selected
+        currentCardType = "DEBIT";
+        qDebug() << "Debit-only card detected, going directly to menu";
+        ui->stackedWidget->setCurrentWidget(ui->pageMenu);
+
+    } else if (cardType == "credit") {
+        // Credit only card - go directly to menu with CREDIT selected
+        currentCardType = "CREDIT";
+        qDebug() << "Credit-only card detected, going directly to menu";
+        ui->stackedWidget->setCurrentWidget(ui->pageMenu);
+
     } else {
-        ui->credit->setText("CREDIT");
+        // Combo card (or default) - show card selection page
+        qDebug() << "Combo card detected, showing card selection page";
+
+        // Set card info on the card selection page
+        QString maskedNumber = "•••• •••• •••• " + cardNumber.right(4);
+        ui->cardInput->setText(maskedNumber);
+
+
+        // Enable both buttons for combo card
+        ui->debit->setEnabled(true);
+        ui->credit->setEnabled(true);
+        ui->debit->setText("\n\nDEBIT\n\nUse checking account");
+        ui->credit->setText("\n\nCREDIT\n\nUse credit line");
+
+        // Navigate to card selection page
+        ui->stackedWidget->setCurrentWidget(ui->pageCardSelection);
     }
 
-    // Navigate to card selection page
-    ui->stackedWidget->setCurrentWidget(ui->pageCardSelection);
-    ui->stackedWidget->setCurrentWidget(ui->pageMenu);
-    ui->stackedWidget->setCurrentWidget(ui->creditMenu);
-
-        reply->deleteLater();
+    reply->deleteLater();
     reply = nullptr;
 }
-    void MainWindow::on_btnDebitSelected()
-    {
-        currentCardType = "DEBIT";
-        qDebug() << "Debit card selected";
-        ui->stackedWidget->setCurrentWidget(ui->pageMenu);
+
+void MainWindow::on_btnDebitSelected()
+{
+    currentCardType = "DEBIT";
+    qDebug() << "Debit card selected";
+    ui->stackedWidget->setCurrentWidget(ui->pageMenu);
+}
+
+void MainWindow::on_btnCreditSelected()
+{
+    if (!ui->credit->isEnabled()) {
+        QMessageBox::information(this, "Credit Not Available",
+                                 "Credit feature is not available for this card.");
+        return;
     }
 
-    void MainWindow::on_btnCreditSelected()
-    {
-        if (!ui->credit->isEnabled()) {
-            QMessageBox::information(this, "Credit Not Available",
-                                     "Credit feature is not available for this card.");
-            return;
-        }
+    currentCardType = "CREDIT";
+    qDebug() << "Credit card selected";
+    ui->stackedWidget->setCurrentWidget(ui->creditMenu);
+}
 
-        currentCardType = "CREDIT";
-        qDebug() << "Credit card selected";
-        ui->stackedWidget->setCurrentWidget(ui->creditMenu);
+void MainWindow::on_btnBackToLogin_clicked()
+{
+    QMessageBox::StandardButton reply = QMessageBox::question(
+        this,
+        "Confirm Logout",
+        "Are you sure you want to go back to login?",
+        QMessageBox::Yes | QMessageBox::No
+        );
+
+    if (reply == QMessageBox::Yes) {
+        webToken.clear();
+        currentCardType.clear();
+        cardType.clear();
+        ui->cardInput->clear();
+        ui->pinInput->clear();
+        ui->stackedWidget->setCurrentWidget(ui->pageLogin);
     }
-    void MainWindow::on_btnBackToLogin_clicked()
-    {
-
-    webToken.clear();
-    currentCardType.clear();
-    ui->cardInput->clear();
-    ui->pinInput->clear();
-    ui->stackedWidget->setCurrentWidget(ui->pageLogin);
-
-    }
+}
 
 
 MainWindow::~MainWindow()
@@ -179,9 +218,36 @@ void MainWindow::on_btnDevLogin_clicked()
 {
     // DEV: ohitetaan kirjautuminen kehitystä varten
     webToken = "DEV_BYPASS";
-    ui->stackedWidget->setCurrentWidget(ui->pageCardSelection);
-    ui->credit->setEnabled(true);
-    ui->credit->setText("CREDIT");
 
+    // Set dummy card info for dev login - TEST COMBO CARD
+    cardNumber = "4532123456789012";
+    accountHolder = "DEV USER";
+    cardType = "combo";  // Change this to test: "debit", "credit", or "combo"
+
+    qDebug() << "DevLogin - Card Type:" << cardType;
+
+    // Route based on card type
+    if (cardType == "debit") {
+        currentCardType = "DEBIT";
+        qDebug() << "Dev: Debit-only card, going to menu";
+        ui->stackedWidget->setCurrentWidget(ui->pageMenu);
+
+    } else if (cardType == "credit") {
+        currentCardType = "CREDIT";
+        qDebug() << "Dev: Credit-only card, going to menu";
+        ui->stackedWidget->setCurrentWidget(ui->creditMenu);
+
+    } else {
+        // Combo card - show selection page
+        qDebug() << "Dev: Combo card, showing selection";
+        QString maskedNumber = "•••• •••• •••• " + cardNumber.right(4);
+        ui->cardInput->setText(maskedNumber);
+        ui->debit->setEnabled(true);
+        ui->credit->setEnabled(true);
+        ui->debit->setText("\n\nDEBIT\n\nUse checking account");
+        ui->credit->setText("\n\nCREDIT\n\nUse credit line");
+
+        ui->stackedWidget->setCurrentWidget(ui->pageCardSelection);
+    }
 }
 
