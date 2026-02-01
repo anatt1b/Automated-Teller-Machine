@@ -26,13 +26,22 @@ private:
     QNetworkAccessManager *manager;
     QNetworkReply *reply;
     QByteArray response_data;
+    QString currentCardType; // "DEBIT" or "CREDIT"
 
+    // Card information from login
+    QString cardNumber;
+    QString accountHolder;
+    QString cardType;
     QString webToken; // JWT
+
+
 private slots:
     void on_btnLogin_clicked();
     void getLoginSlot();
-
+    void on_btnDebitSelected();
+    void on_btnCreditSelected();
     void on_btnDevLogin_clicked();
+    void on_btnBackToLogin_clicked();
 };
 
 #endif // MAINWINDOW_H
