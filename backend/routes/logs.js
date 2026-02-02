@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> f43ecc36214d5c93c592c0a13af1f78f7873f549
+
 const express = require('express');
 const router = express.Router();
 const logs = require('../models/logs');
@@ -69,11 +66,3 @@ function(request, response) {
   });
 });
 
-module.exports = router;
-<<<<<<< HEAD
-=======
-
->>>>>>> 1dabb38c1c0a38c6a60b07d537d9ad868df19fbb
-=======
-
->>>>>>> f43ecc36214d5c93c592c0a13af1f78f7873f549
