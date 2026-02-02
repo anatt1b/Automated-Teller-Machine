@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> f43ecc36214d5c93c592c0a13af1f78f7873f549
+
 const express = require('express');
 const router = express.Router();
 const logs = require('../models/logs');
