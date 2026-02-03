@@ -237,7 +237,11 @@ void MainWindow::on_btnDevLogin_clicked()
     // Set dummy card info for dev login - TEST COMBO CARD
     cardNumber = "4532123456789012";
     accountHolder = "DEV USER";
+
     cardType = "YHDISTELMA";  // Change this to test: "debit", "credit", or "combo"
+
+    cardType = "debit";  // Change this to test: "debit", "credit", or "combo"
+
 
     qDebug() << "DevLogin - Card Type:" << cardType;
 

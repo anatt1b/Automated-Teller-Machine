@@ -18,7 +18,11 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
+
        <number>0</number>
+
+       <number>6</number>
+
       </property>
       <widget class="QWidget" name="pageLogin">
        <widget class="QPushButton" name="btnLogin">
