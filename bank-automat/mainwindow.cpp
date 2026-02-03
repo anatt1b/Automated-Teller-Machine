@@ -18,8 +18,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->stackedWidget->setCurrentWidget(ui->pageLogin);
 
     manager = new QNetworkAccessManager(this);
-    connect(ui->btnLogin, &QPushButton::clicked, this, &MainWindow::on_btnLogin_clicked);
-    connect(manager, &QNetworkAccessManager::finished, this, &MainWindow::getLoginSlot);
+    // connect(ui->btnLogin, &QPushButton::clicked, this, &MainWindow::on_btnLogin_clicked);
+
 
     // Connect card selection page buttons
     connect(ui->debit, &QPushButton::clicked, this, &MainWindow::on_btnDebitSelected);
@@ -76,6 +76,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::on_btnLogin_clicked()
 {
+    qDebug() << "LOGIN CLICK";
+
     // luetaan kentät
     QString card = ui->cardInput->text().trimmed(); // korttinumero
     QString pin  = ui->pinInput->text().trimmed();  // PIN
@@ -99,6 +101,8 @@ void MainWindow::on_btnLogin_clicked()
 
     //  POST
     reply = manager->post(request, data);
+    qDebug() << "Created reply ptr:" << reply;
+
 
     // finished -> slot
     connect(reply, &QNetworkReply::finished, this, &MainWindow::getLoginSlot);
@@ -106,7 +110,11 @@ void MainWindow::on_btnLogin_clicked()
 
 void MainWindow::getLoginSlot()
 {
-    response_data = reply->readAll();
+    // FIX: always use the reply thath emitted the signal ( prevents nullptf / wrong reply crash)
+    QNetworkReply *r = qobject_cast<QNetworkReply*>(sender());
+    if (!r) return;
+
+    response_data = r->readAll();
     qDebug() << "LOGIN RESPONSE:" << response_data;
 
     QJsonObject obj = QJsonDocument::fromJson(response_data).object();
@@ -116,8 +124,7 @@ void MainWindow::getLoginSlot()
     if (webToken.isEmpty()) {
         qDebug() << "Login failed:" << obj.value("message").toString();
         QMessageBox::critical(this, "Login Failed", obj.value("message").toString());
-        reply->deleteLater();
-        reply = nullptr;
+        r->deleteLater();
         return;
     }
 
@@ -126,7 +133,7 @@ void MainWindow::getLoginSlot()
     accountHolder = obj.value("account_holder").toString("ACCOUNT HOLDER");
 
     // Get card type: "debit", "credit", or "combo"
-    cardType = obj.value("card_type").toString("combo").toLower();
+    cardType = obj.value("card_type").toString("YHDISTELMA").toLower();
 
     qDebug() << "Card Type:" << cardType;
 
@@ -147,6 +154,14 @@ void MainWindow::getLoginSlot()
         // Combo card (or default) - show card selection page
         qDebug() << "Combo card detected, showing card selection page";
 
+        // debug tulosteita
+
+    /*  qDebug() << "pageCardSelection ptr:" << ui->pageCardSelection;
+        qDebug() << "indexOf(pageCardSelection):" << ui->stackedWidget->indexOf(ui->pageCardSelection);
+        qDebug() << "debit ptr:" << ui->debit;
+        qDebug() << "credit ptr:" << ui->credit;
+    */
+
         // Set card info on the card selection page
         QString maskedNumber = "•••• •••• •••• " + cardNumber.right(4);
         ui->cardInput->setText(maskedNumber);
@@ -162,8 +177,8 @@ void MainWindow::getLoginSlot()
         ui->stackedWidget->setCurrentWidget(ui->pageCardSelection);
     }
 
-    reply->deleteLater();
-    reply = nullptr;
+    r->deleteLater();
+    // reply = nullptr;
 }
 
 void MainWindow::on_btnDebitSelected()
@@ -222,7 +237,7 @@ void MainWindow::on_btnDevLogin_clicked()
     // Set dummy card info for dev login - TEST COMBO CARD
     cardNumber = "4532123456789012";
     accountHolder = "DEV USER";
-    cardType = "combo";  // Change this to test: "debit", "credit", or "combo"
+    cardType = "YHDISTELMA";  // Change this to test: "debit", "credit", or "combo"
 
     qDebug() << "DevLogin - Card Type:" << cardType;
 

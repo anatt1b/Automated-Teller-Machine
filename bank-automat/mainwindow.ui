@@ -18,7 +18,7 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="pageLogin">
        <widget class="QPushButton" name="btnLogin">
@@ -44,7 +44,7 @@
          </rect>
         </property>
         <property name="echoMode">
-         <enum>QLineEdit::Password</enum>
+         <enum>QLineEdit::EchoMode::Password</enum>
         </property>
         <property name="placeholderText">
          <string>Password</string>
@@ -365,7 +365,7 @@
      <x>0</x>
      <y>0</y>
      <width>789</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
