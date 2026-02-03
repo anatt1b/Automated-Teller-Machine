@@ -1,4 +1,3 @@
-
 const express = require('express');
 const router = express.Router();
 const logs = require('../models/logs');
@@ -66,3 +65,4 @@ function(request, response) {
   });
 });
 
+module.exports = router;
