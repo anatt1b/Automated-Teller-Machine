@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 
 router.post('/', 
   function(request, response) {
+
     if(request.body.cardnumber && request.body.password){
       const cardnumber = request.body.cardnumber;
       const pin = request.body.password;
@@ -24,7 +25,9 @@ router.post('/',
                   response.json({
                     success: true,
                     message: "Login OK",
-                    token: token
+                    token: token,
+                    card_TYPE: dbResult[0].card_TYPE,
+                    cardnumber: cardnumber
                   });
                 }
                 else {

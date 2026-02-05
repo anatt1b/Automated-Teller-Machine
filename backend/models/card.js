@@ -23,7 +23,7 @@ const card = {
   // Used during login to verify the entered PIN with bcrypt.compare().
   // Does NOT return the plaintext PIN, only the stored hash.
   checkPin: function(cardnumber, callback){
-    return db.query('SELECT pin_hash FROM card WHERE cardnumber = ?', [cardnumber], callback);
+    return db.query('SELECT pin_hash, card_TYPE FROM card WHERE cardnumber = ?', [cardnumber], callback);
   },
 
   // Adds a new card to the database and hashes the PIN code
