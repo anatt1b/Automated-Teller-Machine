@@ -133,7 +133,11 @@ void MainWindow::getLoginSlot()
     accountHolder = obj.value("account_holder").toString("ACCOUNT HOLDER");
 
     // Get card type: "debit", "credit", or "combo"
-    cardType = obj.value("card_type").toString("YHDISTELMA").toLower();
+    cardType = obj.value("card_TYPE").toString("yhdistelmä").toLower();
+
+    qDebug() << "RAW card_TYPE:" << obj.value("card_TYPE").toString();
+    qDebug() << "cardType len:" << cardType.length();
+
 
     qDebug() << "Card Type:" << cardType;
 
