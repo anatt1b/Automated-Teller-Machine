@@ -30,6 +30,11 @@ MainWindow::MainWindow(QWidget *parent)
         ui->stackedWidget->setCurrentWidget(ui->pageBalance);
         if (selectedAccountId < 0 || customerId < 0) return;
 
+        // TESTI PRINTTI
+        qDebug() << "Balance click accountId:" << selectedAccountId << "customerId:" << customerId;
+        qDebug() << "GET URL:" << QString("http://localhost:3000/account/%1/%2").arg(selectedAccountId).arg(customerId);
+
+
         QNetworkRequest request(QUrl(QString("http://localhost:3000/account/%1/%2")
                                          .arg(selectedAccountId).arg(customerId)));
         request.setRawHeader("Authorization", QByteArray("Bearer ") + webToken.toUtf8());
@@ -256,10 +261,19 @@ void MainWindow::getBalanceSlot()
 
     response_data = r->readAll();
 
+    //TESTI PRINTTI
+    qDebug() << "BALANCE RESPONSE RAW:" << response_data;
+    qDebug() << "HTTP status:" << r->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    qDebug() << "Network error:" << r->error() << r->errorString();
+
+
     QJsonDocument doc = QJsonDocument::fromJson(response_data);
     QJsonObject obj = doc.isArray() ? doc.array().first().toObject() : doc.object();
 
-    double balance = obj.value("balance").toDouble(0.0);
+    double balance = obj.value("balance").toString().toDouble();
+    // TESTI PRINTTI
+    qDebug() << "Parsed balance:" << balance;
+
     ui->lblBalanceValue->setText(QString::number(balance, 'f', 2));
 
     r->deleteLater();
