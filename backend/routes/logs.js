@@ -2,6 +2,15 @@ const express = require('express');
 const router = express.Router();
 const logs = require('../models/logs');
 
+// GET /logs/:account_id
+router.get('/:account_id', async (req, res) => {
+    try {
+        const rows = await Logs.getByAccount(req.params.account_id);
+        res.json(rows);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+}); 
 
 //GET all from logs
 router.get('/',

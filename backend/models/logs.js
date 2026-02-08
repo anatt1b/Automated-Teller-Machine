@@ -2,6 +2,54 @@ const db = require('../db');
 
 const logs = {
 
+  Logs.create = (
+    account_id,
+    type,               // DEBIT / CREDIT / BALANCE
+    amount,
+    balance_before,
+    balance_after,
+    description
+) => {
+    const sql = `
+        INSERT INTO logs
+        (account_id, type, amount, balance_before, balance_after, description)
+        VALUES (?, ?, ?, ?, ?, ?)
+    `;
+
+    return db.query(sql, [
+        account_id,
+        type,
+        amount,
+        balance_before,
+        balance_after,
+        description
+    ]);
+};
+
+// Nostorajan tarkistus
+Logs.getTodayDebitSum = (account_id) => {
+    const sql = `
+        SELECT COALESCE(SUM(amount), 0) AS total
+        FROM logs
+        WHERE account_id = ?
+        AND type = 'DEBIT'
+        AND DATE(timestamp) = CURDATE()
+    `;
+
+    return db.query(sql, [account_id]);
+};
+
+// Hae lokit tilille
+Logs.getByAccount = (account_id) => {
+    const sql = `
+        SELECT *
+        FROM logs
+        WHERE account_id = ?
+        ORDER BY timestamp DESC
+    `;
+
+    return db.query(sql, [account_id]);
+};
   // GET all logs
   getAll: function (callback) {
     return db.query(
