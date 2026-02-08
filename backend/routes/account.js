@@ -17,7 +17,7 @@ router.get('/',
 //GET one account 
 router.get('/:account_id/:customer_customer_id',
  function(request, response) {
-    account.getOne(request.params.account_id, function(err, dbResult) {
+    account.getOne(request.params.account_id, request.params.customer_customer_id, function(err, dbResult) {
       if (err) {
         response.json(err);
       } else {

@@ -33,6 +33,11 @@ private:
     QString accountHolder;
     QString cardType;
     QString webToken; // JWT
+    QJsonArray accounts;
+    // Selected account_id after debit/credit choice, used in Balance/Withdraw API calls
+    int selectedAccountId = -1;
+    // Customer id for existing /account/:account_id/:customer_customer_id endpoint
+    int customerId = -1;
 
 
 private slots:
@@ -42,6 +47,7 @@ private slots:
     void on_btnCreditSelected();
     void on_btnDevLogin_clicked();
     void on_btnBackToLogin_clicked();
+    void getBalanceSlot();
 };
 
 #endif // MAINWINDOW_H

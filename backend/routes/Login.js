@@ -19,15 +19,23 @@ router.post('/',
             if (dbResult.length > 0) {
               bcrypt.compare(pin,dbResult[0].pin_hash, function(err,compareResult) {
                 if(compareResult) {
+                  
+                  console.log(dbResult[0]);
                   console.log("success");
                   const token = generateAccessToken(cardnumber);
                   response.setHeader('Content-Type', 'application/json'); 
+                  const accounts = dbResult.filter(r => r.account_account_id !== null).map(r => ({
+                    account_id: r.account_account_id,
+                    account_type: r.account_type
+                  }));
                   response.json({
                     success: true,
                     message: "Login OK",
                     token: token,
                     card_TYPE: dbResult[0].card_TYPE,
-                    cardnumber: cardnumber
+                    cardnumber: cardnumber,
+                    accounts: accounts,
+                    customer_id: dbResult[0].customer_customer_id
                   });
                 }
                 else {

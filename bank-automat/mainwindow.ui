@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>789</width>
-    <height>537</height>
+    <width>822</width>
+    <height>584</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,11 +18,7 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-
-       <number>0</number>
-
-       <number>6</number>
-
+       <number>7</number>
       </property>
       <widget class="QWidget" name="pageLogin">
        <widget class="QPushButton" name="btnLogin">
@@ -250,17 +246,56 @@
          <string>Back</string>
         </property>
        </widget>
-       <widget class="QLabel" name="label">
+       <widget class="QLabel" name="Balance">
         <property name="geometry">
          <rect>
-          <x>360</x>
+          <x>200</x>
           <y>170</y>
-          <width>71</width>
+          <width>91</width>
           <height>31</height>
          </rect>
         </property>
         <property name="text">
          <string>Balance</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="WithdrawLimit">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>210</y>
+          <width>111</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Withdraw limit</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lblBalanceValue">
+        <property name="geometry">
+         <rect>
+          <x>500</x>
+          <y>180</y>
+          <width>91</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>---,--</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lblWithdrawLimitValue">
+        <property name="geometry">
+         <rect>
+          <x>500</x>
+          <y>210</y>
+          <width>91</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>---,--</string>
         </property>
        </widget>
       </widget>
@@ -368,8 +403,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>789</width>
-     <height>21</height>
+     <width>822</width>
+     <height>20</height>
     </rect>
    </property>
   </widget>

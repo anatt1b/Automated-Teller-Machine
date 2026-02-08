@@ -28,6 +28,19 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->btnBalance, &QPushButton::clicked, this, [this]() {
         ui->stackedWidget->setCurrentWidget(ui->pageBalance);
+        if (selectedAccountId < 0 || customerId < 0) return;
+
+        // TESTI PRINTTI
+        qDebug() << "Balance click accountId:" << selectedAccountId << "customerId:" << customerId;
+        qDebug() << "GET URL:" << QString("http://localhost:3000/account/%1/%2").arg(selectedAccountId).arg(customerId);
+
+
+        QNetworkRequest request(QUrl(QString("http://localhost:3000/account/%1/%2")
+                                         .arg(selectedAccountId).arg(customerId)));
+        request.setRawHeader("Authorization", QByteArray("Bearer ") + webToken.toUtf8());
+
+        reply = manager->get(request);
+        connect(reply, &QNetworkReply::finished, this, &MainWindow::getBalanceSlot);
     });
 
     connect(ui->btnDeposit, &QPushButton::clicked, this, [this]() {
@@ -118,6 +131,8 @@ void MainWindow::getLoginSlot()
     qDebug() << "LOGIN RESPONSE:" << response_data;
 
     QJsonObject obj = QJsonDocument::fromJson(response_data).object();
+    accounts = obj.value("accounts").toArray(); // store [{account_id, account_type}]
+    customerId = obj.value("customer_id").toInt(-1); // only if backend returns it
     webToken = obj.value("token").toString();
     qDebug() << "TOKEN:" << webToken;
 
@@ -137,34 +152,46 @@ void MainWindow::getLoginSlot()
 
     qDebug() << "RAW card_TYPE:" << obj.value("card_TYPE").toString();
     qDebug() << "cardType len:" << cardType.length();
-
-
     qDebug() << "Card Type:" << cardType;
 
     // Route based on card type
     if (cardType == "debit") {
         // Debit only card - go directly to menu with DEBIT selected
         currentCardType = "DEBIT";
+        // pick DEBIT account id
+        for (const auto &a : accounts){
+            QJsonObject o = a.toObject();
+            if (o.value("account_type").toString() == "DEBIT"){
+                selectedAccountId = o.value("account_id").toInt(-1);
+                break;
+            }
+        }
         qDebug() << "Debit-only card detected, going directly to menu";
+
+        // TESTI PRINTTI
+        qDebug() << "selectedAccountId:" << selectedAccountId << "customerId:" << customerId;
         ui->stackedWidget->setCurrentWidget(ui->pageMenu);
 
     } else if (cardType == "credit") {
         // Credit only card - go directly to menu with CREDIT selected
         currentCardType = "CREDIT";
+        // pick CREDIT account id
+        for (const auto &a : accounts){
+            QJsonObject o = a.toObject();
+            if (o.value("account_type").toString() == "CREDIT"){
+                selectedAccountId = o.value("account_id").toInt(-1);
+                break;
+            }
+        }
         qDebug() << "Credit-only card detected, going directly to menu";
+
+        // TESTI PRINTTI
+        qDebug() << "selectedAccountId:" << selectedAccountId << "customerId:" << customerId;
         ui->stackedWidget->setCurrentWidget(ui->pageMenu);
 
     } else {
         // Combo card (or default) - show card selection page
         qDebug() << "Combo card detected, showing card selection page";
-
-        // debug tulosteita
-
-    /*  qDebug() << "pageCardSelection ptr:" << ui->pageCardSelection;
-        qDebug() << "indexOf(pageCardSelection):" << ui->stackedWidget->indexOf(ui->pageCardSelection);
-        qDebug() << "debit ptr:" << ui->debit;
-        qDebug() << "credit ptr:" << ui->credit;
-    */
 
         // Set card info on the card selection page
         QString maskedNumber = "•••• •••• •••• " + cardNumber.right(4);
@@ -176,6 +203,10 @@ void MainWindow::getLoginSlot()
         ui->credit->setEnabled(true);
         ui->debit->setText("\n\nDEBIT\n\nUse checking account");
         ui->credit->setText("\n\nCREDIT\n\nUse credit line");
+
+        // TESTI PRINTTI
+        qDebug() << "selectedAccountId:" << selectedAccountId;
+
 
         // Navigate to card selection page
         ui->stackedWidget->setCurrentWidget(ui->pageCardSelection);
@@ -189,6 +220,15 @@ void MainWindow::on_btnDebitSelected()
 {
     currentCardType = "DEBIT";
     qDebug() << "Debit card selected";
+    // pick DEBIT account id
+    selectedAccountId = -1;
+    for(const auto &a : accounts){
+        QJsonObject o = a.toObject();
+        if(o.value("account_type").toString()=="DEBIT"){
+            selectedAccountId = o.value("account_id").toInt(-1);
+            break;
+        }
+    }
     ui->stackedWidget->setCurrentWidget(ui->pageMenu);
 }
 
@@ -202,7 +242,41 @@ void MainWindow::on_btnCreditSelected()
 
     currentCardType = "CREDIT";
     qDebug() << "Credit card selected";
+    // pick CREDIT account id
+    selectedAccountId = -1;
+    for(const auto &a : accounts){
+        QJsonObject o = a.toObject();
+        if (o.value("account_type").toString() == "CREDIT");{
+            selectedAccountId = o.value("account_id").toInt(-1);
+            break;
+        }
+    }
     ui->stackedWidget->setCurrentWidget(ui->creditMenu);
+}
+
+void MainWindow::getBalanceSlot()
+{
+    QNetworkReply *r = qobject_cast<QNetworkReply*>(sender());
+    if (!r) return;
+
+    response_data = r->readAll();
+
+    //TESTI PRINTTI
+    qDebug() << "BALANCE RESPONSE RAW:" << response_data;
+    qDebug() << "HTTP status:" << r->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    qDebug() << "Network error:" << r->error() << r->errorString();
+
+
+    QJsonDocument doc = QJsonDocument::fromJson(response_data);
+    QJsonObject obj = doc.isArray() ? doc.array().first().toObject() : doc.object();
+
+    double balance = obj.value("balance").toString().toDouble();
+    // TESTI PRINTTI
+    qDebug() << "Parsed balance:" << balance;
+
+    ui->lblBalanceValue->setText(QString::number(balance, 'f', 2));
+
+    r->deleteLater();
 }
 
 void MainWindow::on_btnBackToLogin_clicked()
