@@ -26,7 +26,6 @@ router.get('/:account_id/:customer_customer_id',
     });
 });
 
-
 // POST add new account
 router.post('/', 
 function(request, response) {
@@ -39,7 +38,6 @@ function(request, response) {
   });
 });
 
-
 //DELETE delete account
 router.delete('/:account_id/:customer_customer_id', 
 function(request, response) {
@@ -51,7 +49,6 @@ function(request, response) {
     }
   });
 });
-
 
 //PUT uptades account with id
 router.put('/:account_id/:customer_customer_id', 
