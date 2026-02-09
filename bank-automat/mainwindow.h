@@ -48,6 +48,7 @@ private slots:
     void on_btnDevLogin_clicked();
     void on_btnBackToLogin_clicked();
     void getBalanceSlot();
+    void getCreditLimitSlot();
 };
 
 #endif // MAINWINDOW_H

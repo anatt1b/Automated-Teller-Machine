@@ -1,8 +1,6 @@
 const db = require('../db');
 
-
 const account = {
-
   // GET all accounts
   getAll: function (callback) {
     return db.query(
@@ -66,5 +64,4 @@ const account = {
     );
   }
 };
-
 module.exports = account;

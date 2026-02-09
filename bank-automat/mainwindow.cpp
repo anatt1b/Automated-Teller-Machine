@@ -71,11 +71,7 @@ MainWindow::MainWindow(QWidget *parent)
         ui->stackedWidget->setCurrentWidget(ui->pageMenu);
     });
 
-    connect(ui->btnCreditBalance, &QPushButton::clicked, this, [this]() {
-        ui->stackedWidget->setCurrentWidget(ui->CreditBalance);
-    });
-
-    connect(ui->btnCreditWithdrawn, &QPushButton::clicked, this, [this]() {
+    connect(ui->btnCreditWithdraw, &QPushButton::clicked, this, [this]() {
         ui->stackedWidget->setCurrentWidget(ui->CreditWithdraw);
     });
 
@@ -176,18 +172,38 @@ void MainWindow::getLoginSlot()
         // Credit only card - go directly to menu with CREDIT selected
         currentCardType = "CREDIT";
         // pick CREDIT account id
-        for (const auto &a : accounts){
+
+        selectedAccountId = -1;
+        qDebug() << "ACCOUNTS from login:" << QJsonDocument(accounts).toJson(QJsonDocument::Compact);
+
+        for (const auto &a : accounts) {
             QJsonObject o = a.toObject();
-            if (o.value("account_type").toString() == "CREDIT"){
-                selectedAccountId = o.value("account_id").toInt(-1);
+
+            const QString type = o.value("account_type").toString().trimmed().toUpper();
+            const int id = o.value("account_id").toInt(-1);
+
+            qDebug() << "account row:" << o << "type=" << type << "id=" << id;
+
+            if (type == "CREDIT") {
+                selectedAccountId = id;
                 break;
             }
+
         }
         qDebug() << "Credit-only card detected, going directly to menu";
 
         // TESTI PRINTTI
         qDebug() << "selectedAccountId:" << selectedAccountId << "customerId:" << customerId;
-        ui->stackedWidget->setCurrentWidget(ui->pageMenu);
+        ui->stackedWidget->setCurrentWidget(ui->creditMenu);
+        // Fetch credit limmit for credit account when entering creditMenu
+        if (selectedAccountId >= 0 && customerId >= 0){
+            QNetworkRequest request(QUrl(QString("http://localhost:3000/account/%1/%2")
+                                             .arg(selectedAccountId).arg(customerId)));
+            request.setRawHeader("Authorization", QByteArray("Bearer ") + webToken.toUtf8());
+
+            reply = manager->get(request);
+            connect(reply, &QNetworkReply::finished, this, &MainWindow::getCreditLimitSlot);
+        }
 
     } else {
         // Combo card (or default) - show card selection page
@@ -239,19 +255,36 @@ void MainWindow::on_btnCreditSelected()
                                  "Credit feature is not available for this card.");
         return;
     }
-
     currentCardType = "CREDIT";
     qDebug() << "Credit card selected";
     // pick CREDIT account id
     selectedAccountId = -1;
+    qDebug() << "ACCOUNTS from login:" << QJsonDocument(accounts).toJson(QJsonDocument::Compact);
+
     for(const auto &a : accounts){
         QJsonObject o = a.toObject();
-        if (o.value("account_type").toString() == "CREDIT");{
-            selectedAccountId = o.value("account_id").toInt(-1);
+
+        const QString type = o.value("account_type").toString().trimmed().toUpper();
+        const int id = o.value("account_id").toInt(-1);
+        qDebug() << "account row: "<< o <<"type=" << type << "id=" << id;
+
+        if (type == "CREDIT"){
+            selectedAccountId = id;
             break;
         }
+        qDebug() << "Picked CREDIT account_id =" << selectedAccountId << "customerId =" << customerId;
+
     }
     ui->stackedWidget->setCurrentWidget(ui->creditMenu);
+    // Fetch credit limmit for credit account when entering creditMenu
+    if (selectedAccountId >= 0 && customerId >= 0){
+        QNetworkRequest request(QUrl(QString("http://localhost:3000/account/%1/%2")
+                                         .arg(selectedAccountId).arg(customerId)));
+        request.setRawHeader("Authorization", QByteArray("Bearer ") + webToken.toUtf8());
+
+        reply = manager->get(request);
+        connect(reply, &QNetworkReply::finished, this, &MainWindow::getCreditLimitSlot);
+    }
 }
 
 void MainWindow::getBalanceSlot()
@@ -296,6 +329,23 @@ void MainWindow::on_btnBackToLogin_clicked()
         ui->pinInput->clear();
         ui->stackedWidget->setCurrentWidget(ui->pageLogin);
     }
+}
+
+void MainWindow::getCreditLimitSlot()
+{
+    QNetworkReply *r = qobject_cast<QNetworkReply*>(sender());
+    if (!r)return;
+
+    response_data = r->readAll();
+
+    QJsonDocument doc = QJsonDocument::fromJson(response_data);
+    QJsonObject obj = doc.isArray() ? doc.array().first().toObject() : doc.object();
+
+    double creditLimit = obj.value("credit_limit").toString().toDouble();
+
+    ui->lblCreditLimit->setText(QString::number(creditLimit, 'f', 2));
+
+    r->deleteLater();
 }
 
 
