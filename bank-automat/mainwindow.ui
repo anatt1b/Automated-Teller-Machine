@@ -18,7 +18,7 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="pageLogin">
        <widget class="QPushButton" name="btnLogin">
@@ -205,7 +205,7 @@
         <property name="geometry">
          <rect>
           <x>350</x>
-          <y>230</y>
+          <y>420</y>
           <width>80</width>
           <height>24</height>
          </rect>
@@ -214,13 +214,195 @@
          <string>Back</string>
         </property>
        </widget>
-       <widget class="QLabel" name="label_4">
+       <widget class="QLabel" name="WithdrawableBalance">
         <property name="geometry">
          <rect>
-          <x>360</x>
-          <y>160</y>
-          <width>61</width>
+          <x>180</x>
+          <y>130</y>
+          <width>100</width>
           <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Withdrawable balance</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="LimitLeft">
+        <property name="geometry">
+         <rect>
+          <x>180</x>
+          <y>190</y>
+          <width>100</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Daily withdraw limit left</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnWithdrawTwenty">
+        <property name="geometry">
+         <rect>
+          <x>300</x>
+          <y>230</y>
+          <width>80</width>
+          <height>24</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>20 €</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnWithdrawForty">
+        <property name="geometry">
+         <rect>
+          <x>300</x>
+          <y>260</y>
+          <width>80</width>
+          <height>24</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>40 €</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnWithdrawSixty">
+        <property name="geometry">
+         <rect>
+          <x>300</x>
+          <y>290</y>
+          <width>80</width>
+          <height>24</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>60 €</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnWithdrawNinety">
+        <property name="geometry">
+         <rect>
+          <x>400</x>
+          <y>230</y>
+          <width>80</width>
+          <height>24</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>90 €</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnWithdrawTwoFourty">
+        <property name="geometry">
+         <rect>
+          <x>400</x>
+          <y>290</y>
+          <width>80</width>
+          <height>24</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>240 €</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnWithdrawHundredForty">
+        <property name="geometry">
+         <rect>
+          <x>400</x>
+          <y>260</y>
+          <width>80</width>
+          <height>24</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>140 €</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="DailyLimit">
+        <property name="geometry">
+         <rect>
+          <x>180</x>
+          <y>160</y>
+          <width>100</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Daily withdraw limit</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="LimitLeft_2">
+        <property name="geometry">
+         <rect>
+          <x>340</x>
+          <y>330</y>
+          <width>100</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Custom Amount:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lblAccountBalance">
+        <property name="geometry">
+         <rect>
+          <x>480</x>
+          <y>130</y>
+          <width>91</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>---,--</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lblWithdrawLim">
+        <property name="geometry">
+         <rect>
+          <x>480</x>
+          <y>160</y>
+          <width>91</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>---,--</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lblWithdrawLimLeft">
+        <property name="geometry">
+         <rect>
+          <x>480</x>
+          <y>190</y>
+          <width>91</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>---,--</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="customAmountInput">
+        <property name="geometry">
+         <rect>
+          <x>310</x>
+          <y>360</y>
+          <width>150</width>
+          <height>20</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnBackWithdrawn_2">
+        <property name="geometry">
+         <rect>
+          <x>350</x>
+          <y>390</y>
+          <width>80</width>
+          <height>24</height>
          </rect>
         </property>
         <property name="text">
@@ -429,7 +611,7 @@
      <x>0</x>
      <y>0</y>
      <width>822</width>
-     <height>21</height>
+     <height>17</height>
     </rect>
    </property>
   </widget>
