@@ -2,28 +2,28 @@ const express = require('express');
 const router = express.Router();
 const logs = require('../models/logs');
 
-// GET /logs/:account_id
-router.get('/:account_id', async (req, res) => {
-    try {
-        const rows = await Logs.getByAccount(req.params.account_id);
-        res.json(rows);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-}); 
 
-//GET all from logs
-router.get('/',
- function(request, response) {
-    logs.getAll(function(err, dbResult) {
-      if (err) {
-        response.json(err);
-      } else {
-        response.json(dbResult);
-      }
-    })
+// GET logs
+router.get('/:account_id', (req, res) => {
+  logs.getByAccount(req.params.account_id, (err, result) => {
+    if (err) return res.status(500).json(err);
+    res.json(result);
+  });
 });
 
+
+
+// GET /logs/latest/10
+router.get('/:account_id/latest/:limit', (req, res) => {
+  logs.getLatestByAccount(
+    req.params.account_id,
+    req.params.limit,
+    (err, result) => {
+      if (err) return res.status(500).json(err);
+      res.json(result);
+    }
+  );
+});
 
 //GET one log
 router.get('/:logs_id',
@@ -62,16 +62,6 @@ function(request, response) {
   });
 });
 
-//PUT upptade logs
-router.put('/:logs_id', 
-function(request, response) {
-  logs.update(request.params.logs_id, request.body, function(err, dbResult) {
-    if (err) {
-      response.json(err);
-    } else {
-      response.json(dbResult);
-    }
-  });
-});
+
 
 module.exports = router;

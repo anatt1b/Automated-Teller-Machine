@@ -2,74 +2,75 @@ const db = require('../db');
 
 const logs = {
 
-  Logs.create = (
+
+
+  //  create new log 
+  create: function (
     account_id,
-    type,               // DEBIT / CREDIT / BALANCE
+    type,
     amount,
     balance_before,
     balance_after,
-    description
-) => {
-    const sql = `
-        INSERT INTO logs
-        (account_id, type, amount, balance_before, balance_after, description)
-        VALUES (?, ?, ?, ?, ?, ?)
-    `;
-
-    return db.query(sql, [
+    description,
+    callback
+  ) {
+    return db.query(
+      `INSERT INTO logs
+       (account_id, type, amount, balance_before, balance_after, description)
+       VALUES (?, ?, ?, ?, ?, ?)`,
+      [
         account_id,
         type,
         amount,
         balance_before,
         balance_after,
         description
-    ]);
-};
-
-// Nostorajan tarkistus
-Logs.getTodayDebitSum = (account_id) => {
-    const sql = `
-        SELECT COALESCE(SUM(amount), 0) AS total
-        FROM logs
-        WHERE account_id = ?
-        AND type = 'DEBIT'
-        AND DATE(timestamp) = CURDATE()
-    `;
-
-    return db.query(sql, [account_id]);
-};
-
-// Hae lokit tilille
-Logs.getByAccount = (account_id) => {
-    const sql = `
-        SELECT *
-        FROM logs
-        WHERE account_id = ?
-        ORDER BY timestamp DESC
-    `;
-
-    return db.query(sql, [account_id]);
-};
-  // GET all logs
-  getAll: function (callback) {
-    return db.query(
-      `SELECT logs_id, time, event, amount, description, account_account_id
-       FROM logs
-       ORDER BY time DESC`,
+      ],
       callback
     );
   },
 
-  // GET one log
-  getOne: function (logs_id, account_account_id, callback) {
+  //  get all logs from account
+  getByAccount: function (account_id, callback) {
     return db.query(
-      `SELECT logs_id, time, event, amount, description, account_account_id
+      `SELECT log_id, type, amount, balance_before, balance_after,
+              description, timestamp
        FROM logs
-       WHERE logs_id = ? AND account_account_id = ?`,
-      [logs_id, account_account_id],
+       WHERE account_id = ?
+       ORDER BY timestamp DESC`,
+      [account_id],
       callback
     );
   },
+
+  //  get latest logs (10 or so)
+  getLatestByAccount: function (account_id, limit, callback) {
+    return db.query(
+      `SELECT log_id, type, amount, balance_before, balance_after,
+              description, timestamp
+       FROM logs
+       WHERE account_id = ?
+       ORDER BY timestamp DESC
+       LIMIT ?`,
+      [account_id, Number(limit)],
+      callback
+    );
+  },
+
+  //  systemlog 
+  createSystemLog: function (description, callback) {
+    return db.query(
+      `INSERT INTO logs
+       (account_id, type, amount, description)
+       VALUES (?, 'SYSTEM', 0, ?)`,
+      [0, description],
+      callback
+    );
+  },
+
+
+
+
 
   // ADD new log
   add: function (log, callback) {
@@ -97,21 +98,7 @@ Logs.getByAccount = (account_id) => {
     );
   },
 
-  // UPDATE log (harvinainen mutta mukana)
-  update: function (logs_id, log, callback) {
-    return db.query(
-      `UPDATE logs
-       SET event = ?, amount = ?, description = ?
-       WHERE logs_id = ?`,
-      [
-        log.event,
-        log.amount,
-        log.description,
-        logs_id
-      ],
-      callback
-    );
-  }
+ 
 };
 
 module.exports = logs;
