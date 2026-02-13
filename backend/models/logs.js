@@ -2,8 +2,6 @@ const db = require('../db');
 
 const logs = {
 
-
-
   //  create new log 
   create: function (
     account_id,
@@ -67,10 +65,6 @@ const logs = {
       callback
     );
   },
-
-
-
-
 
   // ADD new log
   add: function (log, callback) {
