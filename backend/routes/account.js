@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const account = require('../models/account');
+const logs = require('../models/logs');
 
 //GET all accounts
 router.get('/',
@@ -21,6 +22,19 @@ router.get('/:account_id/:customer_customer_id',
       if (err) {
         response.json(err);
       } else {
+        // available_credit = credit_limit -used_credit
+          if(dbResult.length > 0){
+            const row = dbResult[0];
+
+            const creditLimit = Number(row.credit_limit || 0);
+            const usedCredit = Number(row.used_credit || 0);
+
+            row.available_credit = creditLimit -usedCredit;
+
+            //daily withdraw limit
+            const dailyLimit = Number(row.daily_withdraw_limit || 0);
+            row.daily_withdraw_limit = dailyLimit;
+          }
         response.json(dbResult);
       }
     });

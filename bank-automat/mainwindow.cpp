@@ -304,10 +304,12 @@ void MainWindow::getBalanceSlot()
     QJsonObject obj = doc.isArray() ? doc.array().first().toObject() : doc.object();
 
     double balance = obj.value("balance").toString().toDouble();
-    // TESTI PRINTTI
-    qDebug() << "Parsed balance:" << balance;
+    double dailyLimit = obj.value("daily_withdraw_limit").toDouble();
+    double dailyLeft = obj.value("daily_limit_left").toString().toDouble();
 
     ui->lblBalanceValue->setText(QString::number(balance, 'f', 2));
+    ui->lblWithdrawLimitValue->setText(QString::number(dailyLimit, 'f', 2));
+    ui->lblDailyLimitLeft->setText(QString::number(dailyLeft, 'f', 2));
 
     r->deleteLater();
 }
@@ -342,9 +344,9 @@ void MainWindow::getCreditLimitSlot()
     QJsonObject obj = doc.isArray() ? doc.array().first().toObject() : doc.object();
 
     double creditLimit = obj.value("credit_limit").toString().toDouble();
-
+    double availableCredit = obj.value("available_credit").toDouble();
     ui->lblCreditLimit->setText(QString::number(creditLimit, 'f', 2));
-
+    ui->lblAvailableCredit->setText(QString::number(availableCredit, 'f', 2));
     r->deleteLater();
 }
 
