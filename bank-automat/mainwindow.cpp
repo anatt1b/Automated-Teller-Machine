@@ -9,11 +9,22 @@
 #include <QNetworkRequest>
 #include <QMessageBox>
 
+#include <QFile>
+#include <QApplication>
+
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    QFile file(":/style.qss");
+    if(file.open(QFile::ReadOnly)) {
+        QString style = QLatin1String(file.readAll());
+        qApp->setStyleSheet(style);
+        file.close();
+    }
 
     ui->stackedWidget->setCurrentWidget(ui->pageLogin);
 
