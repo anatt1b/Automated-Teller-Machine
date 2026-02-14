@@ -4,7 +4,7 @@ const account = {
   // GET all accounts
   getAll: function (callback) {
     return db.query(
-      `SELECT account_id, balance, open_date, credit_limit, customer_customer_id
+      `SELECT account_id, balance, open_date, credit_limit, used_credit, daily_withdraw_limit, customer_customer_id
        FROM account`,
       callback
     );
@@ -13,7 +13,7 @@ const account = {
   // GET one account
   getOne: function (account_id, customer_customer_id, callback) {
     return db.query(
-      `SELECT account_id, balance, open_date, credit_limit, customer_customer_id
+      `SELECT account_id, balance, open_date, credit_limit, used_credit, daily_withdraw_limit, customer_customer_id
        FROM account
        WHERE account_id = ? AND customer_customer_id = ?`,
       [account_id, customer_customer_id],
@@ -60,6 +60,17 @@ const account = {
         account_id,
         customer_customer_id
       ],
+      callback
+    );
+  },
+
+  // ADD used credit (when credit withdrawwal happens)
+  addUsedCredit: function(account_id, amount, callback){
+    return db.query(
+      `UPDATE account
+      SET used_credit = used_credit + ?
+      Where account_id = ?`,
+      [amount, account_id],
       callback
     );
   }
