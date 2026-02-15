@@ -165,7 +165,7 @@ QLineEdit#pinInput {
 /* Labels */
 QLabel {
     color: #263238;
-    font-size: 13pt;
+    font-size: 11pt;
     background-color: transparent;
 }
 
@@ -189,7 +189,7 @@ QLabel#AvailableCreditValue,
 QLabel#LimitLeft_2 {
     font-weight: bold;
     color: #263238;
-    font-size: 14pt;
+    font-size: 12pt;
 }
 
 /* Status Bar */
