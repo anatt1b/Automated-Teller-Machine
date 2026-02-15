@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>style.qss</file>
+        <file>saatopankki_style.qss</file>
+        <file>saatopankki_logo_small.png</file>
     </qresource>
 </RCC>

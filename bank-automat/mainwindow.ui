@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Säätöpankki - ATM</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -23,16 +23,42 @@
        </font>
       </property>
       <property name="currentIndex">
+<<<<<<< HEAD
+       <number>8</number>
+=======
        <number>5</number>
+>>>>>>> c1584358efb481efb18f208bd4f3f6d32a8c23d0
       </property>
       <widget class="QWidget" name="pageLogin">
+       <widget class="QLabel" name="logoLabel">
+        <property name="geometry">
+         <rect>
+          <x>210</x>
+          <y>30</y>
+          <width>400</width>
+          <height>100</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap resource="resources.qrc">:/saatopankki_logo_small.png</pixmap>
+        </property>
+        <property name="scaledContents">
+         <bool>true</bool>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
        <widget class="QPushButton" name="btnLogin">
         <property name="geometry">
          <rect>
-          <x>320</x>
-          <y>240</y>
-          <width>91</width>
-          <height>41</height>
+          <x>310</x>
+          <y>245</y>
+          <width>120</width>
+          <height>35</height>
          </rect>
         </property>
         <property name="text">
@@ -71,10 +97,10 @@
        <widget class="QPushButton" name="btnDevLogin">
         <property name="geometry">
          <rect>
-          <x>320</x>
+          <x>310</x>
           <y>290</y>
-          <width>91</width>
-          <height>41</height>
+          <width>120</width>
+          <height>35</height>
          </rect>
         </property>
         <property name="text">
@@ -400,11 +426,6 @@
           <height>40</height>
          </rect>
         </property>
-        <property name="font">
-         <font>
-          <pointsize>20</pointsize>
-         </font>
-        </property>
         <property name="text">
          <string>Back</string>
         </property>
@@ -417,11 +438,6 @@
           <width>120</width>
           <height>40</height>
          </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>20</pointsize>
-         </font>
         </property>
         <property name="text">
          <string>20 €</string>
@@ -436,11 +452,6 @@
           <height>40</height>
          </rect>
         </property>
-        <property name="font">
-         <font>
-          <pointsize>20</pointsize>
-         </font>
-        </property>
         <property name="text">
          <string>40 €</string>
         </property>
@@ -453,11 +464,6 @@
           <width>120</width>
           <height>40</height>
          </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>20</pointsize>
-         </font>
         </property>
         <property name="text">
          <string>60 €</string>
@@ -472,11 +478,6 @@
           <height>40</height>
          </rect>
         </property>
-        <property name="font">
-         <font>
-          <pointsize>20</pointsize>
-         </font>
-        </property>
         <property name="text">
          <string>90 €</string>
         </property>
@@ -489,11 +490,6 @@
           <width>120</width>
           <height>40</height>
          </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>20</pointsize>
-         </font>
         </property>
         <property name="text">
          <string>240 €</string>
@@ -508,11 +504,6 @@
           <height>40</height>
          </rect>
         </property>
-        <property name="font">
-         <font>
-          <pointsize>20</pointsize>
-         </font>
-        </property>
         <property name="text">
          <string>140 €</string>
         </property>
@@ -522,15 +513,9 @@
          <rect>
           <x>269</x>
           <y>230</y>
-          <width>231</width>
+          <width>251</width>
           <height>20</height>
          </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>20</pointsize>
-          <bold>true</bold>
-         </font>
         </property>
         <property name="text">
          <string>Custom Amount:</string>
@@ -557,11 +542,6 @@
           <width>140</width>
           <height>40</height>
          </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>20</pointsize>
-         </font>
         </property>
         <property name="text">
          <string>Withdraw</string>
@@ -822,6 +802,8 @@
    </property>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
