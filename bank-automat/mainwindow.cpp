@@ -19,12 +19,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    QFile file(":/style.qss");
-    if(file.open(QFile::ReadOnly)) {
-        QString style = QLatin1String(file.readAll());
-        qApp->setStyleSheet(style);
-        file.close();
-    }
+    // ✅ Stylesheet is now loaded in main.cpp (saatopankki_style.qss)
+    // No need to load it again here - it would overwrite the style!
 
     ui->stackedWidget->setCurrentWidget(ui->pageLogin);
 
@@ -410,6 +406,3 @@ void MainWindow::on_btnDevLogin_clicked()
         ui->stackedWidget->setCurrentWidget(ui->pageCardSelection);
     }
 }
-
-
-
