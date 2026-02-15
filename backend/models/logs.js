@@ -2,10 +2,9 @@ const db = require('../db');
 
 const logs = {
 
-  //  create new log 
   create: function (
     account_id,
-    type,
+    event,
     amount,
     balance_before,
     balance_after,
@@ -14,75 +13,84 @@ const logs = {
   ) {
     return db.query(
       `INSERT INTO logs
-       (account_id, type, amount, balance_before, balance_after, description)
-       VALUES (?, ?, ?, ?, ?, ?)`,
+       (time, event, amount, description,
+        account_account_id, balance_before, balance_after)
+       VALUES (NOW(), ?, ?, ?, ?, ?, ?)`,
       [
-        account_id,
-        type,
+        event,
         amount,
+        description,
+        account_id,
         balance_before,
-        balance_after,
-        description
+        balance_after
       ],
       callback
     );
   },
 
-  //  get all logs from account
-  getByAccount: function (account_id, callback) {
+  getByAccount: function(account_id, callback) {
     return db.query(
-      `SELECT log_id, type, amount, balance_before, balance_after,
-              description, timestamp
+      `SELECT logs_id, time, event,
+              amount, description,
+              balance_before, balance_after
        FROM logs
-       WHERE account_id = ?
-       ORDER BY timestamp DESC`,
+       WHERE account_account_id = ?
+       ORDER BY time DESC`,
       [account_id],
       callback
     );
   },
 
-  //  get latest logs (10 or so)
-  getLatestByAccount: function (account_id, limit, callback) {
+
+
+ // GET all logs by account
+  getByAccount: function(account_id, callback) {
     return db.query(
-      `SELECT log_id, type, amount, balance_before, balance_after,
-              description, timestamp
+      `SELECT logs_id, time, event,
+              amount, description,
+              balance_before, balance_after
        FROM logs
-       WHERE account_id = ?
-       ORDER BY timestamp DESC
+       WHERE account_account_id = ?
+       ORDER BY time DESC`,
+      [account_id],
+      callback
+    );
+  },
+
+  // GET latest logs like 10 or so 
+  getLatestByAccount: function(account_id, limit, callback) {
+    return db.query(
+      `SELECT logs_id, time, event,
+              amount, description,
+              balance_before, balance_after
+       FROM logs
+       WHERE account_account_id = ?
+       ORDER BY time DESC
        LIMIT ?`,
       [account_id, Number(limit)],
       callback
     );
   },
 
-  //  systemlog 
-  createSystemLog: function (description, callback) {
-    return db.query(
-      `INSERT INTO logs
-       (account_id, type, amount, description)
-       VALUES (?, 'SYSTEM', 0, ?)`,
-      [0, description],
-      callback
-    );
-  },
-
-  // ADD new log
+  // SIMPLE add. Not really sure if needed but
   add: function (log, callback) {
     return db.query(
       `INSERT INTO logs
-       (time, event, amount, description, account_account_id)
+       (time, event, amount, description, account_account_id, balance_before, balance_after)
        VALUES (NOW(), ?, ?, ?, ?)`,
       [
         log.event,
         log.amount,
         log.description,
-        log.account_account_id
+        log.account_account_id,
+        log.balance_before,
+        log.balance_after
       ],
       callback
     );
   },
 
-  // DELETE log
+  // DELETE log (admin)
   delete: function (logs_id, callback) {
     return db.query(
       `DELETE FROM logs
@@ -90,9 +98,8 @@ const logs = {
       [logs_id],
       callback
     );
-  },
+  }
 
- 
 };
 
 module.exports = logs;
