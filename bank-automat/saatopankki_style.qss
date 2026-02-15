@@ -1,4 +1,4 @@
-/* Säätöpankki - Modern & Clean Theme */
+/* Säätöpankki - Modern & Clean Theme - FIXED VERSION */
 
 /* Main Window Background */
 QMainWindow {
@@ -6,30 +6,30 @@ QMainWindow {
 }
 
 QWidget {
-    background-color: #f5f5f5;
+    background-color: #ffffff;
     color: #263238;
     font-family: "Segoe UI", "Arial", sans-serif;
 }
 
 /* Stacked Widget Pages */
-QStackedWidget QWidget {
+QStackedWidget > QWidget {
     background-color: #ffffff;
 }
 
-/* Primary Buttons - Teal accent */
+/* Primary Buttons - Teal accent - ALWAYS VISIBLE */
 QPushButton {
     background-color: #009688;
     color: white;
     border: none;
     border-radius: 8px;
-    padding: 10px 20px;
-    font-size: 14pt;
+    padding: 8px 15px;
+    font-size: 13pt;
     font-weight: bold;
-    min-height: 40px;
 }
 
 QPushButton:hover {
     background-color: #00796B;
+    transform: scale(1.02);
 }
 
 QPushButton:pressed {
@@ -66,39 +66,74 @@ QPushButton#btnBackTransactions:hover {
     background-color: #E64A19;
 }
 
+/* Menu page buttons - Extra visibility */
+QPushButton#btnWithdrawn,
+QPushButton#btnDeposit,
+QPushButton#btnBalance,
+QPushButton#btnTransactions {
+    background-color: #009688;
+    color: white;
+    font-size: 13pt;
+    border: 2px solid #00796B;
+}
+
+QPushButton#btnWithdrawn:hover,
+QPushButton#btnDeposit:hover,
+QPushButton#btnBalance:hover,
+QPushButton#btnTransactions:hover {
+    background-color: #00796B;
+    border: 2px solid #004D40;
+}
+
 /* Withdraw amount buttons */
 QPushButton#btnWithdrawTwenty,
 QPushButton#btnWithdrawForty,
 QPushButton#btnWithdrawSixty,
 QPushButton#btnWithdrawNinety,
-QPushButton#btnWithdrawHundred,
-QPushButton#btnWithdrawOneFourty {
+QPushButton#btnWithdrawHundredForty,
+QPushButton#btnWithdrawTwoFourty,
+QPushButton#btnCustomAmountWd {
     background-color: #FFC107;
     color: #263238;
-    font-size: 18pt;
-    min-height: 50px;
+    font-size: 15pt;
+    border: 2px solid #FFB300;
 }
 
 QPushButton#btnWithdrawTwenty:hover,
 QPushButton#btnWithdrawForty:hover,
 QPushButton#btnWithdrawSixty:hover,
 QPushButton#btnWithdrawNinety:hover,
-QPushButton#btnWithdrawHundred:hover,
-QPushButton#btnWithdrawOneFourty:hover {
+QPushButton#btnWithdrawHundredForty:hover,
+QPushButton#btnWithdrawTwoFourty:hover,
+QPushButton#btnCustomAmountWd:hover {
     background-color: #FFB300;
+    border: 2px solid #FF8F00;
 }
 
 /* Card selection buttons - Large and prominent */
 QPushButton#debit,
 QPushButton#credit {
     background-color: #009688;
+    color: white;
     font-size: 24pt;
     min-height: 80px;
     border-radius: 12px;
+    border: 3px solid #00796B;
 }
 
 QPushButton#debit:hover,
 QPushButton#credit:hover {
+    background-color: #00796B;
+    border: 3px solid #004D40;
+}
+
+/* Credit menu buttons */
+QPushButton#btnCreditWithdraw {
+    background-color: #009688;
+    color: white;
+}
+
+QPushButton#btnCreditWithdraw:hover {
     background-color: #00796B;
 }
 
@@ -154,6 +189,7 @@ QLabel#AvailableCreditValue,
 QLabel#LimitLeft_2 {
     font-weight: bold;
     color: #263238;
+    font-size: 14pt;
 }
 
 /* Status Bar */
