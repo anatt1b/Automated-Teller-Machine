@@ -1,0 +1,6 @@
+CREATE EVENT reset_daily_withdrawn
+ON SCHEDULE EVERY 1 DAY
+STARTS TIMESTAMP(CURRENT_DATE + INTERVAL 1 DAY)
+DO
+  UPDATE accounts
+  SET daily_withdrawn = 0;

@@ -3,6 +3,20 @@ const router = express.Router();
 const account = require('../models/account');
 const logs = require('../models/logs');
 
+// POST /account/withdraw
+router.post('/withdraw', (req, res) => {
+
+  const { account_id, amount } = req.body;
+
+  account.withdraw(account_id, amount, (err, result) => {
+
+    if (err)
+      return res.status(400).json({ error: err.message });
+
+    res.json(result);
+  });
+});
+
 //GET all accounts
 router.get('/',
  function(request, response) {
